@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_album/data/phone_list.dart' as phone_list;
 
 void main() {
   runApp(const MyApp());
@@ -13,6 +14,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        textTheme: const TextTheme(
+          bodyText1: TextStyle(fontSize: 18.0),
+          bodyText2: TextStyle(fontSize: 18.0),
+          button: TextStyle(fontSize: 16.0),
+        ).apply(
+          bodyColor: Colors.white,
+          displayColor: Colors.blue,
+        ),
       ),
       home: const MyHomePage(),
     );
@@ -27,26 +36,74 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  TextEditingController textFieldController = TextEditingController();
+  final bool isValidPhoneNumber = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      body: Stack(
+        clipBehavior: Clip.none,
+        alignment: AlignmentDirectional.topStart,
+        fit: StackFit.expand,
+        children: <Widget>[
+          Container(
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+              image: AssetImage('assets/avc.jpg'),
+              fit: BoxFit.cover,
+            )),
+          ),
+          SafeArea(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text('Đăng nhập bằng số điện thoại:'),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: textFieldController,
+                      keyboardType: TextInputType.number,
+                      showCursor: true,
+                      autofocus: false,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 25),
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                          gapPadding: 4.0,
+                        ),
+                      ),
+                      onChanged: (value) {},
+                    ),
+                    const SizedBox(height: 30),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          fixedSize: const Size(120, 48),
+                          backgroundColor: Colors.red,
+                          textStyle: const TextStyle(
+                              color: Colors.white, fontSize: 18)),
+                      child: const Text('Tiếp tục'),
+                      onPressed: () {},
+                    ),
+                    const SizedBox(height: 120),
+                  ],
+                ),
+              ),
             ),
-            Text(
-              '',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
-      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
