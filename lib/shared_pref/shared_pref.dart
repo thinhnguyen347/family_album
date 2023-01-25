@@ -6,7 +6,12 @@ class AppSharedPreferences {
     preferences.setBool('isValidPhoneNumber', true);
   }
 
-  static Future<bool> checkValidPhoneStatus() async {
+  static setInvalidPhoneNumber() async {
+    final preferences = await SharedPreferences.getInstance();
+    preferences.setBool('isValidPhoneNumber', false);
+  }
+
+  static Future<bool> checkValidPhoneNumberStatus() async {
     final preferences = await SharedPreferences.getInstance();
     return preferences.getBool('isValidPhoneNumber') ?? false;
   }

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-void showInfoDialog(BuildContext context, String message, bool isAlert) =>
+void showAlertDialog(BuildContext context, String message) =>
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -12,10 +12,10 @@ void showInfoDialog(BuildContext context, String message, bool isAlert) =>
               children: [
                 Lottie.asset(
                   'assets/lottie/wave-birdie.json',
-                  width: 40,
+                  width: 100,
                   fit: BoxFit.fill,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
                 Text(message,
                     style: const TextStyle(fontSize: 18),
                     textAlign: TextAlign.center),
@@ -28,7 +28,7 @@ void showInfoDialog(BuildContext context, String message, bool isAlert) =>
                   Navigator.pop(context);
                 },
                 child: const Text(
-                  'Close',
+                  'Đã hiểu',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:home_album/data/phone_list.dart' as phone_list;
+import 'package:home_album/shared_pref/shared_pref.dart';
+
+import 'components/dialog.dart';
+import 'data/phone_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,11 +41,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController textFieldController = TextEditingController();
-  final bool isValidPhoneNumber = false;
+  late Future<bool> isValidPhoneNumber;
 
   @override
-  void initState() {
-    // TODO: implement initState
+  void initState()  {
+      isValidPhoneNumber = AppSharedPreferences.checkValidPhoneNumberStatus();
     super.initState();
   }
 
@@ -94,7 +98,18 @@ class _MyHomePageState extends State<MyHomePage> {
                           textStyle: const TextStyle(
                               color: Colors.white, fontSize: 18)),
                       child: const Text('Tiếp tục'),
-                      onPressed: () {},
+                      onPressed: () {
+                        String phoneInputNumber =
+                            textFieldController.text.trim();
+                        if (phone_list.phoneNumbers
+                            .contains(phoneInputNumber)) {
+                          AppSharedPreferences.setValidPhoneNumber();
+                        } else {
+                          AppSharedPreferences.setInvalidPhoneNumber();
+                          showAlertDialog(context,
+                              'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
+                        }
+                      },
                     ),
                     const SizedBox(height: 120),
                   ],
