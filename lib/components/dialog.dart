@@ -29,7 +29,7 @@ void showAlertDialog(BuildContext context, String message) =>
                 },
                 child: const Text(
                   'Đã hiểu',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
               ),
             ],

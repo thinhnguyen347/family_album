@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:home_album/data/phone_list.dart' as phone_list;
 import 'package:home_album/shared_pref/shared_pref.dart';
+import 'package:home_album/components/dialog.dart';
 
-import 'components/dialog.dart';
-import 'data/phone_list.dart';
 
 void main() {
   runApp(const MyApp());
