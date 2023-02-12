@@ -19,6 +19,10 @@ class ApiService {
       throw Exception('Error: $e');
     }
 
+    if (kDebugMode) {
+      print(response);
+    }
+
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body) as Map<
           String,
@@ -28,10 +32,6 @@ class ApiService {
         PhoneDetails phoneItem = PhoneDetails.fromJson(
             jsonResponse['results'][i]);
         phoneList.add(phoneItem);
-      }
-
-      if (kDebugMode) {
-        print(phoneList);
       }
 
     } else {
@@ -61,9 +61,6 @@ class ApiService {
         photoList.add(photoItem);
       }
 
-      if (kDebugMode) {
-        print(photoList);
-      }
     } else {
       // print('Request failed with status: ${response.statusCode}.');
     }

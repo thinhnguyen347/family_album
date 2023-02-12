@@ -42,15 +42,24 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController textFieldController = TextEditingController();
   late Future<bool> isValidPhoneNumber;
-  late Future<List<PhoneDetails>> phoneList;
+  List<PhoneDetails> phoneList = [];
 
   @override
   initState() {
-    phoneList = ApiService().getPhoneNumber();
-    if (kDebugMode) {
-      print(phoneList);
-    }
+    ApiService().getPhoneNumber().then((value){
+      for (var item in value){
+        phoneList.add(item);
+        if (kDebugMode) {
+          print(phoneList);
+        }
+      }
+    });
+
     isValidPhoneNumber = AppSharedPreferences.checkValidPhoneNumberStatus();
+
+    if (kDebugMode) {
+      print(isValidPhoneNumber);
+    }
     super.initState();
   }
 
@@ -68,61 +77,66 @@ class _MyHomePageState extends State<MyHomePage> {
               image: AssetImage('assets/avc.jpg'),
               fit: BoxFit.cover,
             )),
-          ), phoneList.
-          SafeArea(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text('Đăng nhập bằng số điện thoại:'),
-                    const SizedBox(height: 20),
-                    TextField(
-                      controller: textFieldController,
-                      keyboardType: TextInputType.number,
-                      showCursor: true,
-                      autofocus: false,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 25),
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                          gapPadding: 4.0,
-                        ),
-                      ),
-                      onChanged: (value) {},
-                    ),
-                    const SizedBox(height: 30),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(120, 48),
-                          backgroundColor: Colors.red,
-                          textStyle: const TextStyle(
-                              color: Colors.white, fontSize: 18)),
-                      child: const Text('Tiếp tục'),
-                      onPressed: () {
-                        String phoneInputNumber =
-                            textFieldController.text.trim();
-                        for (var item in phoneList) {
-                          if (item?.phoneNumber == phoneInputNumber) {
-                            AppSharedPreferences.setValidPhoneNumber();
-                          } else {
-                            AppSharedPreferences.setInvalidPhoneNumber();
-                            showAlertDialog(context,
-                                'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
-                          }
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 120),
-                  ],
-                ),
-              ),
-            ),
           ),
+          phoneList.isEmpty
+              ? const Center(
+                  child: CircularProgressIndicator(color: Colors.white,),
+                )
+              : SafeArea(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          const Text('Đăng nhập bằng số điện thoại:'),
+                          const SizedBox(height: 20),
+                          TextField(
+                            controller: textFieldController,
+                            keyboardType: TextInputType.number,
+                            showCursor: true,
+                            autofocus: false,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 25),
+                            decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(16.0)),
+                                gapPadding: 4.0,
+                              ),
+                            ),
+                            onChanged: (value) {},
+                          ),
+                          const SizedBox(height: 30),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                fixedSize: const Size(120, 48),
+                                backgroundColor: Colors.red,
+                                textStyle: const TextStyle(
+                                    color: Colors.white, fontSize: 18)),
+                            child: const Text('Tiếp tục'),
+                            onPressed: () {
+                              String phoneInputNumber =
+                                  textFieldController.text.trim();
+                              for (var item in phoneList) {
+                                if (item?.phoneNumber == phoneInputNumber) {
+                                  AppSharedPreferences.setValidPhoneNumber();
+                                } else {
+                                  AppSharedPreferences.setInvalidPhoneNumber();
+                                  showAlertDialog(context,
+                                      'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
+                                }
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 120),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
         ],
       ),
     );
