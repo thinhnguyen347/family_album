@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:home_album/api/api_service.dart';
 import 'package:home_album/models/phone_details.dart';
@@ -41,11 +42,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController textFieldController = TextEditingController();
   late Future<bool> isValidPhoneNumber;
-  late List<PhoneDetails> phoneList;
+  late Future<List<PhoneDetails>> phoneList;
 
   @override
-  Future<void> initState() async {
-    phoneList = ApiService().getPhoneNumber() as List<PhoneDetails>;
+  initState() {
+    phoneList = ApiService().getPhoneNumber();
+    if (kDebugMode) {
+      print(phoneList);
+    }
     isValidPhoneNumber = AppSharedPreferences.checkValidPhoneNumberStatus();
     super.initState();
   }
@@ -64,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
               image: AssetImage('assets/avc.jpg'),
               fit: BoxFit.cover,
             )),
-          ),
+          ), phoneList.
           SafeArea(
             child: Center(
               child: Padding(
@@ -103,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         String phoneInputNumber =
                             textFieldController.text.trim();
                         for (var item in phoneList) {
-                          if (item.phoneNumber == phoneInputNumber) {
+                          if (item?.phoneNumber == phoneInputNumber) {
                             AppSharedPreferences.setValidPhoneNumber();
                           } else {
                             AppSharedPreferences.setInvalidPhoneNumber();
