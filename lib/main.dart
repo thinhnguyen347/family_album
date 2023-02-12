@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:home_album/data/phone_list.dart' as phone_list;
+import 'package:home_album/api/api_service.dart';
+import 'package:home_album/models/phone_details.dart';
 import 'package:home_album/shared_pref/shared_pref.dart';
 import 'package:home_album/components/dialog.dart';
-
 
 void main() {
   runApp(const MyApp());
@@ -41,10 +41,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController textFieldController = TextEditingController();
   late Future<bool> isValidPhoneNumber;
+  late List<PhoneDetails> phoneList;
 
   @override
-  void initState()  {
-      isValidPhoneNumber = AppSharedPreferences.checkValidPhoneNumberStatus();
+  Future<void> initState() async {
+    phoneList = ApiService().getPhoneNumber() as List<PhoneDetails>;
+    isValidPhoneNumber = AppSharedPreferences.checkValidPhoneNumberStatus();
     super.initState();
   }
 
@@ -100,13 +102,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         String phoneInputNumber =
                             textFieldController.text.trim();
-                        if (phone_list.phoneNumbers
-                            .contains(phoneInputNumber)) {
-                          AppSharedPreferences.setValidPhoneNumber();
-                        } else {
-                          AppSharedPreferences.setInvalidPhoneNumber();
-                          showAlertDialog(context,
-                              'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
+                        for (var item in phoneList) {
+                          if (item.phoneNumber == phoneInputNumber) {
+                            AppSharedPreferences.setValidPhoneNumber();
+                          } else {
+                            AppSharedPreferences.setInvalidPhoneNumber();
+                            showAlertDialog(context,
+                                'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
+                          }
                         }
                       },
                     ),
