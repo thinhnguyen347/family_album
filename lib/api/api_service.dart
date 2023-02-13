@@ -34,9 +34,8 @@ class ApiService {
         phoneList.add(phoneItem);
       }
 
-    } else {
-      // print('Request failed with status: ${response.statusCode}.');
     }
+
     return phoneList;
   }
 
@@ -61,8 +60,6 @@ class ApiService {
         photoList.add(photoItem);
       }
 
-    } else {
-      // print('Request failed with status: ${response.statusCode}.');
     }
 
     return photoList;
