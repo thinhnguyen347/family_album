@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:home_album/api/api_service.dart';
 import 'package:home_album/models/phone_details.dart';
 import 'package:home_album/shared_pref/shared_pref.dart';
-import 'package:home_album/components/dialog.dart';
 
 void main() {
   runApp(const MyApp());
@@ -42,14 +41,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController textFieldController = TextEditingController();
   late Future<bool> isValidPhoneNumber;
-  late Future<List<PhoneDetails>> phoneList;
+  late Future<List<PhoneDetails>> getPhoneList;
+  List<PhoneDetails> phoneList = [];
 
   @override
   initState() {
     super.initState();
-
+    getPhoneList = ApiService().getPhoneNumber();
     isValidPhoneNumber = AppSharedPreferences.checkValidPhoneNumberStatus();
-    phoneList = ApiService().getPhoneNumber();
   }
 
   @override
@@ -72,73 +71,71 @@ class _MyHomePageState extends State<MyHomePage> {
               fit: BoxFit.cover,
             )),
           ),
+          SafeArea(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text('Đăng nhập bằng số điện thoại:'),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: textFieldController,
+                      keyboardType: TextInputType.number,
+                      showCursor: true,
+                      autofocus: false,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 25),
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                          gapPadding: 4.0,
+                        ),
+                      ),
+                      onChanged: (value) {},
+                    ),
+                    const SizedBox(height: 30),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          fixedSize: const Size(120, 48),
+                          backgroundColor: Colors.red,
+                          textStyle: const TextStyle(
+                              color: Colors.white, fontSize: 18)),
+                      child: const Text('Tiếp tục'),
+                      onPressed: () {
+                        // String phoneInputNumber =
+                        //     textFieldController.text.trim();
+                        // if (list.isNotEmpty) {
+                        //   for (var item in list) {
+                        //     if (item.phoneNumber == phoneInputNumber) {
+                        //       AppSharedPreferences.setValidPhoneNumber();
+                        //     }
+                        //   }
+                        // } else {
+                        //   AppSharedPreferences.setInvalidPhoneNumber();
+                        //   showAlertDialog(context,
+                        //       'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
+                        // }
+                      },
+                    ),
+                    const SizedBox(height: 120),
+                  ],
+                ),
+              ),
+            ),
+          ),
           FutureBuilder(
-              future: phoneList,
+              future: getPhoneList,
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+                if (!snapshot.hasData) {
                   return const Center(
-                      child: CircularProgressIndicator(color: Colors.white));
+                        child: CircularProgressIndicator(color: Colors.white));
                 }
 
-                var list = snapshot.data as List<PhoneDetails>;
-
-                return SafeArea(
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          const Text('Đăng nhập bằng số điện thoại:'),
-                          const SizedBox(height: 20),
-                          TextField(
-                            controller: textFieldController,
-                            keyboardType: TextInputType.number,
-                            showCursor: true,
-                            autofocus: false,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 25),
-                            decoration: const InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(16.0)),
-                                gapPadding: 4.0,
-                              ),
-                            ),
-                            onChanged: (value) {},
-                          ),
-                          const SizedBox(height: 30),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                fixedSize: const Size(120, 48),
-                                backgroundColor: Colors.red,
-                                textStyle: const TextStyle(
-                                    color: Colors.white, fontSize: 18)),
-                            child: const Text('Tiếp tục'),
-                            onPressed: () {
-                              String phoneInputNumber =
-                                  textFieldController.text.trim();
-                              if (list.isNotEmpty) {
-                                for (var item in list) {
-                                  if (item.phoneNumber == phoneInputNumber) {
-                                    AppSharedPreferences.setValidPhoneNumber();
-                                  }
-                                }
-                              } else {
-                                AppSharedPreferences.setInvalidPhoneNumber();
-                                showAlertDialog(context,
-                                    'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
-                              }
-                            },
-                          ),
-                          const SizedBox(height: 120),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
+                return const SizedBox(width: 0);
               }),
         ],
       ),

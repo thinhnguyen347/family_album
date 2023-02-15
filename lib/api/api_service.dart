@@ -1,4 +1,5 @@
 import 'dart:convert' as convert;
+import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter/foundation.dart';
@@ -10,7 +11,7 @@ class ApiService {
   static const baseURL = "https://family-album-svr.onrender.com";
 
   Future<List<PhoneDetails>> getPhoneNumber() async {
-    var url = Uri.parse("$baseURL/phone");
+    var url = Uri.parse("https://family-album-svr.onrender.com/phone");
     http.Response response;
     List<PhoneDetails> phoneList = [];
 
@@ -21,20 +22,24 @@ class ApiService {
     }
 
     if (response.statusCode == 200) {
-      var jsonResponse =
-          convert.jsonDecode(response.body) as Map;
+
+      var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
       var data = jsonResponse['results'];
+
+      if (kDebugMode) {
+        print(response.body.toString());
+      }
 
       for (int i = 0; i < data.length; i++) {
         PhoneDetails phoneItem =
             PhoneDetails.fromJson(jsonResponse['results'][i]);
         phoneList.add(phoneItem);
       }
+
+
     }
 
-    if (kDebugMode) {
-      print(phoneList);
-    }
+
 
     return phoneList;
   }
