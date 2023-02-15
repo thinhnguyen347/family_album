@@ -7,33 +7,33 @@ import 'package:home_album/models/photo_details.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const baseURL = "https://family-album-admin.vercel.app";
+  static const baseURL = "https://family-album-svr.onrender.com";
 
   Future<List<PhoneDetails>> getPhoneNumber() async {
+    var url = Uri.parse("$baseURL/phone");
     http.Response response;
     List<PhoneDetails> phoneList = [];
 
     try {
-      response = await http.get(Uri.parse("$baseURL/phone"));
+      response = await http.get(url);
     } catch (e) {
       throw Exception('Error: $e');
     }
 
-    if (kDebugMode) {
-      print(response);
-    }
-
     if (response.statusCode == 200) {
-      var jsonResponse = convert.jsonDecode(response.body) as Map<
-          String,
-          dynamic>;
+      var jsonResponse =
+          convert.jsonDecode(response.body) as Map;
+      var data = jsonResponse['results'];
 
-      for (int i = 0; i < jsonResponse['results'].length; i++) {
-        PhoneDetails phoneItem = PhoneDetails.fromJson(
-            jsonResponse['results'][i]);
+      for (int i = 0; i < data.length; i++) {
+        PhoneDetails phoneItem =
+            PhoneDetails.fromJson(jsonResponse['results'][i]);
         phoneList.add(phoneItem);
       }
+    }
 
+    if (kDebugMode) {
+      print(phoneList);
     }
 
     return phoneList;
@@ -50,16 +50,14 @@ class ApiService {
     }
 
     if (response.statusCode == 200) {
-      var jsonResponse = convert.jsonDecode(response.body) as Map<
-          String,
-          dynamic>;
+      var jsonResponse =
+          convert.jsonDecode(response.body) as Map<String, dynamic>;
 
       for (int i = 0; i < jsonResponse['results'].length; i++) {
-        PhotoDetails photoItem = PhotoDetails.fromJson(
-            jsonResponse['results'][i]);
+        PhotoDetails photoItem =
+            PhotoDetails.fromJson(jsonResponse['results'][i]);
         photoList.add(photoItem);
       }
-
     }
 
     return photoList;

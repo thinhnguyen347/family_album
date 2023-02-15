@@ -42,25 +42,19 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController textFieldController = TextEditingController();
   late Future<bool> isValidPhoneNumber;
-  List<PhoneDetails> phoneList = [];
+  late Future<List<PhoneDetails>> phoneList;
 
   @override
   initState() {
-    ApiService().getPhoneNumber().then((value){
-      for (var item in value){
-        phoneList.add(item);
-        if (kDebugMode) {
-          print(phoneList);
-        }
-      }
-    });
+    super.initState();
 
     isValidPhoneNumber = AppSharedPreferences.checkValidPhoneNumberStatus();
+    phoneList = ApiService().getPhoneNumber();
+  }
 
-    if (kDebugMode) {
-      print(isValidPhoneNumber);
-    }
-    super.initState();
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -78,11 +72,17 @@ class _MyHomePageState extends State<MyHomePage> {
               fit: BoxFit.cover,
             )),
           ),
-          phoneList.isEmpty
-              ? const Center(
-                  child: CircularProgressIndicator(color: Colors.white,),
-                )
-              : SafeArea(
+          FutureBuilder(
+              future: phoneList,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                      child: CircularProgressIndicator(color: Colors.white));
+                }
+
+                var list = snapshot.data as List<PhoneDetails>;
+
+                return SafeArea(
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -120,14 +120,16 @@ class _MyHomePageState extends State<MyHomePage> {
                             onPressed: () {
                               String phoneInputNumber =
                                   textFieldController.text.trim();
-                              for (var item in phoneList) {
-                                if (item?.phoneNumber == phoneInputNumber) {
-                                  AppSharedPreferences.setValidPhoneNumber();
-                                } else {
-                                  AppSharedPreferences.setInvalidPhoneNumber();
-                                  showAlertDialog(context,
-                                      'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
+                              if (list.isNotEmpty) {
+                                for (var item in list) {
+                                  if (item.phoneNumber == phoneInputNumber) {
+                                    AppSharedPreferences.setValidPhoneNumber();
+                                  }
                                 }
+                              } else {
+                                AppSharedPreferences.setInvalidPhoneNumber();
+                                showAlertDialog(context,
+                                    'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
                               }
                             },
                           ),
@@ -136,7 +138,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ),
-                ),
+                );
+              }),
         ],
       ),
     );
