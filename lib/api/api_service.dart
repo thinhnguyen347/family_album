@@ -1,16 +1,15 @@
-import 'dart:convert' as convert;
+import 'dart:convert';
 import 'dart:core';
 
-import 'package:flutter/foundation.dart';
 import 'package:home_album/models/phone_details.dart';
 import 'package:home_album/models/photo_details.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const baseURL = "family-album-svr.onrender.com";
+  static const baseURL = "https://family-album-svr.onrender.com";
 
   Future<List<PhoneDetails>> getPhoneNumber() async {
-    var url = Uri.https(baseURL, "/phone");
+    var url = Uri.parse('$baseURL/phone');
     http.Response response;
     List<PhoneDetails> phoneList = [];
 
@@ -21,17 +20,13 @@ class ApiService {
     }
 
     if (response.statusCode == 200) {
-      var jsonResponse =
-          convert.jsonDecode(response.body) as Map<String, dynamic>;
-      var data = jsonResponse['results'];
+      List<dynamic> jsonResponse =
+          jsonDecode(response.body) as List<dynamic>;
 
-      for (int i = 0; i < data.length; i++) {
+      for (int i = 0; i < jsonResponse.length; i++) {
         PhoneDetails phoneItem =
-            PhoneDetails.fromJson(jsonResponse['results'][i]);
+            PhoneDetails.fromJson(jsonResponse[i]);
         phoneList.add(phoneItem);
-        if (kDebugMode) {
-          print(phoneItem.phoneNumber);
-        }
       }
     }
 
@@ -49,12 +44,11 @@ class ApiService {
     }
 
     if (response.statusCode == 200) {
-      var jsonResponse =
-          convert.jsonDecode(response.body) as Map<String, dynamic>;
+      var jsonResponse = jsonDecode(response.body) as List<dynamic>;
 
-      for (int i = 0; i < jsonResponse['results'].length; i++) {
+      for (int i = 0; i < jsonResponse.length; i++) {
         PhotoDetails photoItem =
-            PhotoDetails.fromJson(jsonResponse['results'][i]);
+            PhotoDetails.fromJson(jsonResponse[i]);
         photoList.add(photoItem);
       }
     }

@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:home_album/api/api_service.dart';
+import 'package:home_album/components/dialog.dart';
 import 'package:home_album/models/phone_details.dart';
 import 'package:home_album/shared_pref/shared_pref.dart';
 
@@ -106,19 +106,27 @@ class _MyHomePageState extends State<MyHomePage> {
                               color: Colors.white, fontSize: 18)),
                       child: const Text('Tiếp tục'),
                       onPressed: () {
-                        // String phoneInputNumber =
-                        //     textFieldController.text.trim();
-                        // if (list.isNotEmpty) {
-                        //   for (var item in list) {
-                        //     if (item.phoneNumber == phoneInputNumber) {
-                        //       AppSharedPreferences.setValidPhoneNumber();
-                        //     }
-                        //   }
-                        // } else {
-                        //   AppSharedPreferences.setInvalidPhoneNumber();
-                        //   showAlertDialog(context,
-                        //       'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
-                        // }
+                        String phoneInputNumber =
+                            textFieldController.text.trim();
+                        if (phoneList.isNotEmpty) {
+                          for (var item in phoneList) {
+                            if (item.phoneNumber == phoneInputNumber) {
+                              AppSharedPreferences.setValidPhoneNumber();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: Colors.green,
+                                      content: Text(
+                                          'Xin chào ${item.username}',
+                                          textAlign: TextAlign.center,
+                                          style:
+                                              const TextStyle(fontSize: 20))));
+                            }
+                          }
+                        } else {
+                          AppSharedPreferences.setInvalidPhoneNumber();
+                          showAlertDialog(context,
+                              'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
+                        }
                       },
                     ),
                     const SizedBox(height: 120),
@@ -129,13 +137,22 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           FutureBuilder(
               future: getPhoneList,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                        child: CircularProgressIndicator(color: Colors.white));
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<PhoneDetails>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return const SnackBar(content: Text('No data'));
+                  }
+
+                  if (snapshot.hasData) {
+                    phoneList = snapshot.data!;
+
+                    return const SizedBox(width: 0);
+                  }
                 }
 
-                return const SizedBox(width: 0);
+                return const Center(
+                    child: CircularProgressIndicator(color: Colors.white));
               }),
         ],
       ),

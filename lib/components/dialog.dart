@@ -35,3 +35,10 @@ void showAlertDialog(BuildContext context, String message) =>
             ],
           );
         });
+
+void showSuccessDialog(BuildContext context, String name) =>
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SnackBar(content: Text('Xin chào $name'));
+        });

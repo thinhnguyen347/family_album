@@ -1,7 +1,7 @@
 class PhoneDetails {
   late String username;
   late String phoneNumber;
-  late int id;
+  late dynamic id;
 
   PhoneDetails({ required this.username, required this.phoneNumber, required this.id});
 
