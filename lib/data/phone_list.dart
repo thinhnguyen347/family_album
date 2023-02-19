@@ -1,1 +1,0 @@
-const List<String> phoneNumbers = ['0984018891', '0886718891'];

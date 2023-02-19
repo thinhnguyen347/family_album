@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:home_album/api/api_service.dart';
 import 'package:home_album/components/dialog.dart';
+import 'package:home_album/components/photo_slide.dart';
 import 'package:home_album/models/phone_details.dart';
 import 'package:home_album/shared_pref/shared_pref.dart';
 
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         textTheme: const TextTheme(
-          bodyLarge: TextStyle(fontSize: 18.0),
+          bodyLarge: TextStyle(fontSize: 20.0),
           bodyMedium: TextStyle(fontSize: 18.0),
           labelSmall: TextStyle(fontSize: 16.0),
         ).apply(
@@ -40,15 +42,20 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController textFieldController = TextEditingController();
-  late Future<bool> isValidPhoneNumber;
   late Future<List<PhoneDetails>> getPhoneList;
   List<PhoneDetails> phoneList = [];
 
   @override
   initState() {
     super.initState();
+    // AppSharedPreferences.setInvalidPhoneNumber();
     getPhoneList = ApiService().getPhoneNumber();
-    isValidPhoneNumber = AppSharedPreferences.checkValidPhoneNumberStatus();
+    AppSharedPreferences.checkValidPhoneNumberStatus().then((value) {
+      if (value) {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const PhotoSlider()));
+      }
+    });
   }
 
   @override
@@ -111,21 +118,46 @@ class _MyHomePageState extends State<MyHomePage> {
                         if (phoneList.isNotEmpty) {
                           for (var item in phoneList) {
                             if (item.phoneNumber == phoneInputNumber) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.transparent,
+                                      content: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: Container(
+                                            padding: const EdgeInsets.only(
+                                                top: 16,
+                                                bottom: 16,
+                                                left: 8,
+                                                right: 8),
+                                            decoration: const BoxDecoration(
+                                                color: Colors.black87),
+                                            child: Text(
+                                                "Xin chào ${item.username}!",
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontSize: 20)),
+                                          ),
+                                        ),
+                                      )
+                              )
+                              );
+                              Future.delayed(const Duration(seconds: 3)).then(
+                                  (value) => Navigator.of(context)
+                                      .pushReplacement(MaterialPageRoute(
+                                          builder: (context) =>
+                                              const PhotoSlider())));
                               AppSharedPreferences.setValidPhoneNumber();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      backgroundColor: Colors.green,
-                                      content: Text(
-                                          'Xin chào ${item.username}',
-                                          textAlign: TextAlign.center,
-                                          style:
-                                              const TextStyle(fontSize: 20))));
+                              return;
+                            } else {
+                              AppSharedPreferences.setInvalidPhoneNumber();
+                              showAlertDialog(context,
+                                  'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
+                              return;
                             }
                           }
-                        } else {
-                          AppSharedPreferences.setInvalidPhoneNumber();
-                          showAlertDialog(context,
-                              'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
                         }
                       },
                     ),
@@ -146,7 +178,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
                   if (snapshot.hasData) {
                     phoneList = snapshot.data!;
-
                     return const SizedBox(width: 0);
                   }
                 }
