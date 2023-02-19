@@ -15,7 +15,7 @@ class _PhotoSliderState extends State<PhotoSlider>
     Text('Ảnh chung'),
     Text('Ảnh của bà'),
     Text('Thu xinh'),
-    Text('Hằng xinh')
+    Text('Hằng cute')
   ];
 
   @override

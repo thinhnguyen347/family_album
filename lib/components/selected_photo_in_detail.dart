@@ -61,7 +61,7 @@ class _MovieInDetailState extends State<SelectedPhotoInDetail> {
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
-                      'Thông tin về ảnh:',
+                      'Thông tin:',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
