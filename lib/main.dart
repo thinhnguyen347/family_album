@@ -141,9 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     fontSize: 20)),
                                           ),
                                         ),
-                                      )
-                              )
-                              );
+                                      )));
                               Future.delayed(const Duration(seconds: 3)).then(
                                   (value) => Navigator.of(context)
                                       .pushReplacement(MaterialPageRoute(
