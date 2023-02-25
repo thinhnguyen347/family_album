@@ -6,6 +6,7 @@ import 'package:lottie/lottie.dart';
 
 class AlbumView extends StatefulWidget {
   final String target;
+
   const AlbumView({Key? key, required this.target}) : super(key: key);
 
   @override
@@ -36,8 +37,8 @@ class _AlbumViewState extends State<AlbumView> {
           return listPhotoOnTab.isEmpty
               ? Center(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
                       Lottie.asset(
                         'assets/lottie/133784-back-to-school.json',
                         width: 150,
@@ -46,9 +47,7 @@ class _AlbumViewState extends State<AlbumView> {
                       const SizedBox(height: 16),
                       const Text('Không có dữ liệu!',
                           style: TextStyle(color: Colors.white))
-                    ]
-                  )
-          )
+                    ]))
               : GridView.builder(
                   padding: const EdgeInsets.all(16),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -75,13 +74,21 @@ Widget itemPhoto(PhotoDetails photo, context) {
             child: GridTile(
               child: GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SelectedPhotoInDetail(selectedPhoto: photo)));
+                    if (photo.link != '') {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  SelectedPhotoInDetail(selectedPhoto: photo)));
+                    }
                   },
-                  child: Image.network(
-                    photo.link,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  )),
+                  child: photo.link != ''
+                      ? Image.network(
+                          photo.link,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        )
+                      : Image.asset('assets/images/No-Image-Placeholder.png')),
             ),
           )),
       const SizedBox(height: 8),
