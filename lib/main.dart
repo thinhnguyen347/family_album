@@ -16,19 +16,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(fontSize: 20.0),
-          bodyMedium: TextStyle(fontSize: 18.0),
-          labelSmall: TextStyle(fontSize: 16.0),
-        ).apply(
-          bodyColor: Colors.white,
-          displayColor: Colors.blue,
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 900),
+      child: MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          textTheme: const TextTheme(
+            bodyLarge: TextStyle(fontSize: 20.0),
+            bodyMedium: TextStyle(fontSize: 18.0),
+            labelSmall: TextStyle(fontSize: 16.0),
+          ).apply(
+            bodyColor: Colors.white,
+            displayColor: Colors.blue,
+          ),
         ),
+        home: const MyHomePage(),
       ),
-      home: const MyHomePage(),
     );
   }
 }
