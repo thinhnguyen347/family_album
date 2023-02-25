@@ -50,7 +50,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.home_album"
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 28
         targetSdkVersion flutter.targetSdkVersion
         versionCode 1
         versionName "1.0.0"
