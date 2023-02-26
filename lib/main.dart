@@ -121,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             textFieldController.text.trim();
                         if (phoneList.isNotEmpty) {
                           for (var item in phoneList) {
-                            if (item.phoneNumber.contains(phoneInputNumber)) {
+                            if (item.phoneNumber == phoneInputNumber) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                       backgroundColor: Colors.transparent,
