@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:home_album/api/api_service.dart';
 import 'package:home_album/components/dialog.dart';
@@ -119,9 +120,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         String phoneInputNumber =
                             textFieldController.text.trim();
-                        if (phoneList.isNotEmpty) {
-                          for (var item in phoneList) {
-                            if (item.phoneNumber == phoneInputNumber) {
+                        final foundPeople = phoneList.where((element) =>
+                        element.phoneNumber == phoneInputNumber).toList();
+
+                        if (kDebugMode) {
+                            print(foundPeople[0].phoneNumber);
+                            print(phoneInputNumber);
+                          }
+
+                        if (foundPeople.isNotEmpty) {
+                          // for (var i = 0; i < phoneList.length; i++) {
+                            if (foundPeople[0].phoneNumber == phoneInputNumber) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                       backgroundColor: Colors.transparent,
@@ -139,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             decoration: const BoxDecoration(
                                                 color: Colors.black87),
                                             child: Text(
-                                                "Xin chào ${item.username}!",
+                                                "Xin chào ${foundPeople[0].username}!",
                                                 textAlign: TextAlign.center,
                                                 style: const TextStyle(
                                                     fontSize: 20)),
@@ -159,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
                               return;
                             }
-                          }
+                          // }
                         }
                       },
                     ),
