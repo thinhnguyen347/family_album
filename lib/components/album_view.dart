@@ -3,6 +3,7 @@ import 'package:home_album/api/api_service.dart';
 import 'package:home_album/components/selected_photo_in_detail.dart';
 import 'package:home_album/models/photo_details.dart';
 import 'package:lottie/lottie.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class AlbumView extends StatefulWidget {
   final String target;
@@ -20,6 +21,11 @@ class _AlbumViewState extends State<AlbumView> {
   void initState() {
     photoList = ApiService().getAlbum(widget.target);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -73,22 +79,29 @@ Widget itemPhoto(PhotoDetails photo, context) {
             borderRadius: BorderRadius.circular(10),
             child: GridTile(
               child: GestureDetector(
-                  onTap: () {
-                    if (photo.link != '') {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  SelectedPhotoInDetail(selectedPhoto: photo)));
-                    }
-                  },
-                  child: photo.link != ''
-                      ? Image.network(
-                          photo.link,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        )
-                      : Image.asset('assets/images/No-Image-Placeholder.png')),
+                onTap: () {
+                  if (photo.link != '') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                SelectedPhotoInDetail(selectedPhoto: photo)));
+                  }
+                },
+                child: CachedNetworkImage(
+                  imageUrl: photo.link,
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover),
+                    ),
+                  ),
+                  placeholder: (context, url) =>
+                      const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) =>
+                      Image.asset('assets/images/No-Image-Placeholder.png'),
+                ),
+              ),
             ),
           )),
       const SizedBox(height: 8),
