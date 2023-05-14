@@ -48,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController textFieldController = TextEditingController();
   late Future<List<PhoneDetails>> getPhoneList;
   List<PhoneDetails> phoneList = [];
+  bool showContinueBtn = false;
 
   @override
   initState() {
@@ -107,10 +108,20 @@ class _MyHomePageState extends State<MyHomePage> {
                           gapPadding: 4.0,
                         ),
                       ),
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        if (textFieldController.text.trim().length == 10) {
+                          setState(() {
+                            showContinueBtn = true;
+                          });
+                        } else {
+                          setState(() {
+                            showContinueBtn = false;
+                          });
+                        }
+                      },
                     ),
                     const SizedBox(height: 30),
-                    ElevatedButton(
+                    showContinueBtn ? ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           fixedSize: const Size(120, 48),
                           backgroundColor: Colors.red,
@@ -120,58 +131,50 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         String phoneInputNumber =
                             textFieldController.text.trim();
-                        final foundPeople = phoneList.where((element) =>
-                        element.phoneNumber == phoneInputNumber).toList();
-
-                        if (kDebugMode) {
-                            print(foundPeople[0].phoneNumber);
-                            print(phoneInputNumber);
-                          }
+                        final foundPeople = phoneList
+                            .where((element) =>
+                                element.phoneNumber == phoneInputNumber)
+                            .toList();
 
                         if (foundPeople.isNotEmpty) {
-                          // for (var i = 0; i < phoneList.length; i++) {
-                            if (foundPeople[0].phoneNumber == phoneInputNumber) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                      backgroundColor: Colors.transparent,
-                                      content: Padding(
-                                        padding: const EdgeInsets.all(16.0),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          child: Container(
-                                            padding: const EdgeInsets.only(
-                                                top: 16,
-                                                bottom: 16,
-                                                left: 8,
-                                                right: 8),
-                                            decoration: const BoxDecoration(
-                                                color: Colors.black87),
-                                            child: Text(
-                                                "Xin chào ${foundPeople[0].username}!",
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                    fontSize: 20)),
-                                          ),
-                                        ),
-                                      )));
-                              Future.delayed(const Duration(seconds: 3)).then(
-                                  (value) => Navigator.of(context)
-                                      .pushReplacement(MaterialPageRoute(
-                                          builder: (context) =>
-                                              const PhotoSlider())));
-                              AppSharedPreferences.setValidPhoneNumber();
-                              return;
-                            } else {
-                              AppSharedPreferences.setInvalidPhoneNumber();
-                              showAlertDialog(context,
-                                  'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
-                              return;
-                            }
-                          // }
+                          if (foundPeople[0].phoneNumber == phoneInputNumber) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                backgroundColor: Colors.transparent,
+                                content: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Container(
+                                      padding: const EdgeInsets.only(
+                                          top: 16,
+                                          bottom: 16,
+                                          left: 8,
+                                          right: 8),
+                                      decoration: const BoxDecoration(
+                                          color: Colors.black87),
+                                      child: Text(
+                                          "Xin chào ${foundPeople[0].username}!",
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(fontSize: 20)),
+                                    ),
+                                  ),
+                                )));
+                            Future.delayed(const Duration(seconds: 3)).then(
+                                (value) => Navigator.of(context)
+                                    .pushReplacement(MaterialPageRoute(
+                                        builder: (context) =>
+                                            const PhotoSlider())));
+                            AppSharedPreferences.setValidPhoneNumber();
+                            return;
+                          } else {
+                            AppSharedPreferences.setInvalidPhoneNumber();
+                            showAlertDialog(context,
+                                'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
+                            return;
+                          }
                         }
                       },
-                    ),
+                    ) : const SizedBox(height: 0),
                     const SizedBox(height: 120),
                   ],
                 ),
