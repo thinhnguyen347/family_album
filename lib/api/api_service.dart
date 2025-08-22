@@ -6,7 +6,7 @@ import 'package:home_album/models/photo_details.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const baseURL = "https://family-album-svr.onrender.com";
+  static const baseURL = "https://family-album-svr-j8pz.onrender.com";
 
   Future<List<PhoneDetails>> getPhoneNumber() async {
     var url = Uri.parse('$baseURL/phone');

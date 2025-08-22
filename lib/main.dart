@@ -50,16 +50,15 @@ class _MyHomePageState extends State<MyHomePage> {
   bool showContinueBtn = false;
 
   @override
-  initState() {
+  initState() async {
     super.initState();
     // AppSharedPreferences.setInvalidPhoneNumber();
     getPhoneList = ApiService().getPhoneNumber();
-    AppSharedPreferences.checkValidPhoneNumberStatus().then((value) {
-      if (value) {
+    final isValidPhone = await AppSharedPreferences.checkValidPhoneNumberStatus();
+    if (mounted && isValidPhone) {
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const PhotoSlider()));
       }
-    });
   }
 
   @override
@@ -137,32 +136,41 @@ class _MyHomePageState extends State<MyHomePage> {
 
                         if (foundPeople.isNotEmpty) {
                           if (foundPeople[0].phoneNumber == phoneInputNumber) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                backgroundColor: Colors.transparent,
-                                content: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: Container(
-                                      padding: const EdgeInsets.only(
-                                          top: 16,
-                                          bottom: 16,
-                                          left: 8,
-                                          right: 8),
-                                      decoration: const BoxDecoration(
-                                          color: Colors.black87),
-                                      child: Text(
-                                          "Xin chào ${foundPeople[0].username}!",
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(fontSize: 20)),
-                                    ),
-                                  ),
-                                )));
-                            Future.delayed(const Duration(seconds: 3)).then(
-                                (value) => Navigator.of(context)
-                                    .pushReplacement(MaterialPageRoute(
-                                        builder: (context) =>
-                                            const PhotoSlider())));
+
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                                builder: (context) =>
+                                const PhotoSlider()));
+
+                            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            //     backgroundColor: Colors.transparent,
+                            //     content: Padding(
+                            //       padding: const EdgeInsets.all(16.0),
+                            //       child: ClipRRect(
+                            //         borderRadius: BorderRadius.circular(8.0),
+                            //         child: Container(
+                            //           padding: const EdgeInsets.only(
+                            //               top: 16,
+                            //               bottom: 16,
+                            //               left: 8,
+                            //               right: 8),
+                            //           decoration: const BoxDecoration(
+                            //               color: Colors.black87),
+                            //           child: Text(
+                            //               "Xin chào ${foundPeople[0].username}!",
+                            //               textAlign: TextAlign.center,
+                            //               style: const TextStyle(fontSize: 20)),
+                            //         ),
+                            //       ),
+                            //     )));
+                            //
+                            // Future.delayed(const Duration(seconds: 3)).then(
+                            //      (value) => Navigator.of(context)
+                            //         .pushReplacement(MaterialPageRoute(
+                            //             builder: (context) =>
+                            //                 const PhotoSlider())));
+
+
                             AppSharedPreferences.setValidPhoneNumber();
                             return;
                           } else {
