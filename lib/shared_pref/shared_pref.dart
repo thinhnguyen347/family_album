@@ -1,12 +1,12 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSharedPreferences {
-  static setValidPhoneNumber() async {
+  static Future<void> setValidPhoneNumber() async {
     final preferences = await SharedPreferences.getInstance();
     preferences.setBool('isValidPhoneNumber', true);
   }
 
-  static setInvalidPhoneNumber() async {
+  static Future<void> setInvalidPhoneNumber() async {
     final preferences = await SharedPreferences.getInstance();
     preferences.setBool('isValidPhoneNumber', false);
   }

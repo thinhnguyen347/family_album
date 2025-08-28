@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'album_view.dart';
 
 class PhotoSlider extends StatefulWidget {
-  const PhotoSlider({Key? key}) : super(key: key);
+  const PhotoSlider({super.key});
 
   @override
   State<PhotoSlider> createState() => _PhotoSliderState();
@@ -64,7 +64,7 @@ class _PhotoSliderState extends State<PhotoSlider>
   }
 }
 
-tabBar({required controller, required List<Widget> tabs}) {
+Padding tabBar({required TabController controller, required List<Widget> tabs}) {
   return Padding(
     padding: const EdgeInsets.only(top: 10, left: 25, bottom: 10),
     child: TabBar(
@@ -81,7 +81,7 @@ tabBar({required controller, required List<Widget> tabs}) {
   );
 }
 
-tabBarView({required controller}) {
+Expanded tabBarView({required TabController controller}) {
   return Expanded(
       child: TabBarView(
         controller: controller,

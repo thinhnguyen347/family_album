@@ -63,7 +63,7 @@ class _MovieInDetailState extends State<SelectedPhotoInDetail> {
                   padding: const EdgeInsets.all(16),
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
-                  color: Colors.black45.withOpacity(0.8))
+                  color: Colors.black45.withValues(alpha: 0.8))
               : const SizedBox(width: 0, height: 0),
           isMiniSizedView
               ? SingleChildScrollView(
