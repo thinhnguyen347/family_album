@@ -6,8 +6,7 @@ import 'package:flutter/services.dart';
 class SelectedPhotoInDetail extends StatefulWidget {
   final PhotoDetails selectedPhoto;
 
-  const SelectedPhotoInDetail({Key? key, required this.selectedPhoto})
-      : super(key: key);
+  const SelectedPhotoInDetail({super.key, required this.selectedPhoto});
 
   @override
   State<SelectedPhotoInDetail> createState() => _MovieInDetailState();

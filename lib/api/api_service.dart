@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'dart:core';
 
 import 'package:home_album/models/phone_details.dart';
 import 'package:home_album/models/photo_details.dart';
-import 'package:http/http.dart' as http;
 
 class ApiService {
   List<PhoneDetails> getPhoneNumber() {

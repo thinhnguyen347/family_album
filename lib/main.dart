@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:home_album/api/api_service.dart';
 import 'package:home_album/components/dialog.dart';
@@ -45,20 +44,27 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController textFieldController = TextEditingController();
-  late Future<List<PhoneDetails>> getPhoneList;
+  late List<PhoneDetails> getPhoneList;
   List<PhoneDetails> phoneList = [];
   bool showContinueBtn = false;
+  late bool isValidPhone = false;
 
   @override
-  initState() async {
+  void initState() {
     super.initState();
     // AppSharedPreferences.setInvalidPhoneNumber();
     getPhoneList = ApiService().getPhoneNumber();
-    final isValidPhone = await AppSharedPreferences.checkValidPhoneNumberStatus();
+
+  }
+
+  @override
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+    isValidPhone = await AppSharedPreferences.checkValidPhoneNumberStatus();
     if (mounted && isValidPhone) {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const PhotoSlider()));
-      }
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const PhotoSlider()));
+    }
   }
 
   @override
@@ -187,25 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-          ),
-          FutureBuilder(
-              future: getPhoneList,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<PhoneDetails>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasError) {
-                    return const SnackBar(content: Text('No data'));
-                  }
-
-                  if (snapshot.hasData) {
-                    phoneList = snapshot.data!;
-                    return const SizedBox(width: 0);
-                  }
-                }
-
-                return const Center(
-                    child: CircularProgressIndicator(color: Colors.white));
-              }),
+          )
         ],
       ),
     );

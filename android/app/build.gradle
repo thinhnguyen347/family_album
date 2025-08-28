@@ -29,7 +29,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 36
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -47,7 +47,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.home_album"
-        minSdkVersion 32
+        minSdkVersion 33
         targetSdkVersion 36
         versionCode 1
         versionName "1.0.0"
