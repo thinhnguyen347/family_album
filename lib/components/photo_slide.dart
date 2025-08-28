@@ -87,6 +87,7 @@ Expanded tabBarView({required TabController controller}) {
         controller: controller,
         children: const [
           AlbumView(target: 'collective'),
+          AlbumView(target: 'sushi'),
           AlbumView(target: 'banoi'),
           AlbumView(target: 'thu'),
           AlbumView(target: 'hang'),

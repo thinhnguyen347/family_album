@@ -113,6 +113,23 @@ class ApiService {
         {"id": 16, "title": "Ảnh du lịch Quảng Ninh", "link": "https://i.ibb.co/K7YdCzz/33459323932-d010e491f7-o.jpg"},
         {"id": 17, "title": "Ảnh du lịch Quảng Ninh", "link": "https://i.ibb.co/WFP9V9h/33444970722-3592f0cbe1-o.jpg"}
       ],
+      "sushi": [
+        {"id": 1, "title": "001", "link": "https://i.ibb.co/tBQrLX5/hang1t.jpg"},
+        {"id": 2, "title": "02", "link": "https://i.ibb.co/GnQ0wfq/60399-104268952971442-2107407-n.jpg"},
+        {"id": 10, "title": "003", "link": "https://i.ibb.co/4S2WkkX/P15-02-13-15-22.jpg"},
+        {"id": 11, "title": "004", "link": "https://i.ibb.co/Gk92D9d/P15-02-13-15-23.jpg"},
+        {"id": 5, "title": "005", "link": "https://i.ibb.co/x1rC5ws/20170129-161141.jpg"},
+        {"id": 6, "title": "006", "link": "https://i.ibb.co/jV2y4CY/20170129-164910.jpg"},
+        {"id": 7, "title": "007", "link": "https://i.ibb.co/WGJvmk3/20170129-161055.jpg"},
+        {"id": 8, "title": "008", "link": "https://i.ibb.co/80LSB3Y/20170129-114529.jpg"},
+        {"id": 13, "title": "009", "link": "https://i.ibb.co/1XwT9cC/20170129-145919.jpg"},
+        {"id": 9, "title": "010", "link": "https://i.ibb.co/6HX0ZZB/33451634381-d1b215bffb-o.jpg"},
+        {"id": 12, "title": "011", "link": "https://i.ibb.co/Rp987dB/20170321-094730.jpg"},
+        {"id": 14, "title": "012", "link": "https://i.ibb.co/JcNwbZy/33601619565-18c7d48eb6-o.jpg"},
+        {"id": 15, "title": "013", "link": "https://i.ibb.co/T8QnJCN/33444972942-8279e60745-o.jpg"},
+        {"id": 16, "title": "014", "link": "https://i.ibb.co/K7YdCzz/33459323932-d010e491f7-o.jpg"},
+        {"id": 17, "title": "015", "link": "https://i.ibb.co/WFP9V9h/33444970722-3592f0cbe1-o.jpg"}
+      ],
     };
 
     List<dynamic> photos = album[target];
