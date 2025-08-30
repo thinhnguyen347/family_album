@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:home_album/api/api_service.dart';
 import 'package:home_album/components/dialog.dart';
@@ -44,17 +45,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController textFieldController = TextEditingController();
-  late List<PhoneDetails> getPhoneList;
-  List<PhoneDetails> phoneList = [];
+  late List<PhoneDetails> phoneList;
   bool showContinueBtn = false;
   late bool isValidPhone = false;
 
   @override
   void initState() {
     super.initState();
-    // AppSharedPreferences.setInvalidPhoneNumber();
-    getPhoneList = ApiService().getPhoneNumber();
-
+    phoneList = ApiService().getPhoneNumber();
   }
 
   @override
@@ -62,8 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.didChangeDependencies();
     isValidPhone = await AppSharedPreferences.checkValidPhoneNumberStatus();
     if (mounted && isValidPhone) {
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const PhotoSlider()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const PhotoSlider()));
     }
   }
 
@@ -103,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       showCursor: true,
                       autofocus: false,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 25),
+                      style: const TextStyle(fontSize: 25, color: Colors.black),
                       decoration: const InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -125,69 +122,58 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                     ),
                     const SizedBox(height: 30),
-                    showContinueBtn ? ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(120, 48),
-                          backgroundColor: Colors.red,
-                          textStyle: const TextStyle(
-                              color: Colors.white, fontSize: 18)),
-                      child: const Text('Tiếp tục'),
-                      onPressed: () {
-                        String phoneInputNumber =
-                            textFieldController.text.trim();
-                        final foundPeople = phoneList
-                            .where((element) =>
-                                element.phoneNumber == phoneInputNumber)
-                            .toList();
+                    showContinueBtn
+                        ? ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                fixedSize: const Size(120, 48),
+                                backgroundColor: Colors.red,
+                                textStyle: const TextStyle(color: Colors.white, fontSize: 18)),
+                            child: const Text('Tiếp tục', style: TextStyle(color: Colors.white)),
+                            onPressed: () {
+                              String phoneInputNumber = textFieldController.text.trim();
+                              final foundPeople = phoneList.where((element) => element.phoneNumber == phoneInputNumber).toList();
 
-                        if (foundPeople.isNotEmpty) {
-                          if (foundPeople[0].phoneNumber == phoneInputNumber) {
+                              if (kDebugMode) {
+                                print(foundPeople);
+                              }
+                              if (foundPeople.isNotEmpty) {
+                                if (foundPeople[0].phoneNumber == phoneInputNumber) {
+                                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const PhotoSlider()));
 
-                            Navigator.of(context)
-                                .pushReplacement(MaterialPageRoute(
-                                builder: (context) =>
-                                const PhotoSlider()));
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                      backgroundColor: Colors.transparent,
+                                      content: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(8.0),
+                                          child: Container(
+                                            padding: const EdgeInsets.only(top: 16, bottom: 16, left: 8, right: 8),
+                                            decoration: const BoxDecoration(color: Colors.black87),
+                                            child: Text("Xin chào ${foundPeople[0].username}!",
+                                                textAlign: TextAlign.center, style: const TextStyle(fontSize: 20)),
+                                          ),
+                                        ),
+                                      )));
 
-                            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            //     backgroundColor: Colors.transparent,
-                            //     content: Padding(
-                            //       padding: const EdgeInsets.all(16.0),
-                            //       child: ClipRRect(
-                            //         borderRadius: BorderRadius.circular(8.0),
-                            //         child: Container(
-                            //           padding: const EdgeInsets.only(
-                            //               top: 16,
-                            //               bottom: 16,
-                            //               left: 8,
-                            //               right: 8),
-                            //           decoration: const BoxDecoration(
-                            //               color: Colors.black87),
-                            //           child: Text(
-                            //               "Xin chào ${foundPeople[0].username}!",
-                            //               textAlign: TextAlign.center,
-                            //               style: const TextStyle(fontSize: 20)),
-                            //         ),
-                            //       ),
-                            //     )));
-                            //
-                            // Future.delayed(const Duration(seconds: 3)).then(
-                            //      (value) => Navigator.of(context)
-                            //         .pushReplacement(MaterialPageRoute(
-                            //             builder: (context) =>
-                            //                 const PhotoSlider())));
+                                  Future.delayed(const Duration(seconds: 3)).then((value) => {
+                                        if (context.mounted)
+                                          {
+                                            Navigator.of(context)
+                                                .pushReplacement(MaterialPageRoute(builder: (context) => const PhotoSlider()))
+                                          }
+                                      });
 
-
-                            AppSharedPreferences.setValidPhoneNumber();
-                            return;
-                          } else {
-                            AppSharedPreferences.setInvalidPhoneNumber();
-                            showAlertDialog(context,
-                                'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
-                            return;
-                          }
-                        }
-                      },
-                    ) : const SizedBox(height: 0),
+                                  AppSharedPreferences.setValidPhoneNumber();
+                                  return;
+                                } else {
+                                  AppSharedPreferences.setInvalidPhoneNumber();
+                                  showAlertDialog(context, 'Số điện thoại không hợp lệ. Vui lòng thử số khác!');
+                                  return;
+                                }
+                              }
+                            },
+                          )
+                        : const SizedBox(height: 0),
                     const SizedBox(height: 120),
                   ],
                 ),

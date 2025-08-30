@@ -13,6 +13,7 @@ class _PhotoSliderState extends State<PhotoSlider>
   late TabController tabController;
   List<Widget> tabs = const [
     Text('Ảnh chung'),
+    Text('Sushi'),
     Text('Ảnh của bà'),
     Text('Thu xinh'),
     Text('Hằng cute')
@@ -26,8 +27,8 @@ class _PhotoSliderState extends State<PhotoSlider>
 
   @override
   void dispose() {
-    tabController.dispose();
     super.dispose();
+    tabController.dispose();
   }
 
   @override
