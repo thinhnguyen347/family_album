@@ -62,7 +62,7 @@ Widget itemPhoto(PhotoDetails photo, context) {
                   }
                 },
                 child: photo.link != ""
-                    ? Image.network(photo.link, fit: BoxFit.fitHeight)
+                    ? Image.asset(photo.link, fit: BoxFit.fitHeight)
                     : Image.asset('assets/images/No-Image-Placeholder.png'),
               ),
             ),

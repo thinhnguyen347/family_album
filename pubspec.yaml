@@ -68,6 +68,11 @@ flutter:
      - assets/
      - assets/lottie/
      - assets/images/
+     - assets/images/gen/
+     - assets/images/thu/
+     - assets/images/hang/
+     - assets/images/sushi/
+     - assets/images/ba/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
