@@ -51,7 +51,7 @@ class _MovieInDetailState extends State<SelectedPhotoInDetail> {
         children: [
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Image.network(
+            child: Image.asset(
               selectedPhoto.link,
               fit: BoxFit.cover,
               height: MediaQuery.of(context).size.height,
@@ -71,7 +71,7 @@ class _MovieInDetailState extends State<SelectedPhotoInDetail> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.network(selectedPhoto.link, fit: BoxFit.fitWidth),
+                      Image.asset(selectedPhoto.link, fit: BoxFit.fitWidth),
                       const SizedBox(height: 24),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -100,29 +100,29 @@ class _MovieInDetailState extends State<SelectedPhotoInDetail> {
                                   ),
                                 ]),
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  OutlinedButton(
-                                    onPressed: () {
-                                      Clipboard.setData(ClipboardData(
-                                          text: selectedPhoto.link));
-                                    },
-                                    style: OutlinedButton.styleFrom(
-                                      side: const BorderSide(
-                                          width: 1.0, color: Colors.white),
-                                      fixedSize: const Size(120, 40),
-                                    ),
-                                    child: const Text('Copy link',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                            height: 1.5)),
-                                  ),
-                                ]),
-                          )
+                          // Expanded(
+                          //   flex: 1,
+                          //   child: Row(
+                          //       mainAxisAlignment: MainAxisAlignment.center,
+                          //       children: [
+                          //         OutlinedButton(
+                          //           onPressed: () {
+                          //             Clipboard.setData(ClipboardData(
+                          //                 text: selectedPhoto.link));
+                          //           },
+                          //           style: OutlinedButton.styleFrom(
+                          //             side: const BorderSide(
+                          //                 width: 1.0, color: Colors.white),
+                          //             fixedSize: const Size(120, 40),
+                          //           ),
+                          //           child: const Text('Copy link',
+                          //               style: TextStyle(
+                          //                   color: Colors.white,
+                          //                   fontSize: 14,
+                          //                   height: 1.5)),
+                          //         ),
+                          //       ]),
+                          // )
                         ],
                       )
                     ],
