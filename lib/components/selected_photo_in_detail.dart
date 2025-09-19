@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:home_album/models/photo_details.dart';
-import 'package:flutter/services.dart';
 
 class SelectedPhotoInDetail extends StatefulWidget {
   final PhotoDetails selectedPhoto;
